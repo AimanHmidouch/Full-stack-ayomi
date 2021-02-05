@@ -1,0 +1,29 @@
+version: "2"
+services:
+  app:
+    build: ./server
+    links:
+      - db
+    ports:
+      - "5000:5000"
+
+  db:
+    image: mysql:8.0.21
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - PMA_HOST=db
+      - MYSQL_ROOT_PASSWOsRD=root
+    ports:
+      - 8080:80
+    
